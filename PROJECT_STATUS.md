@@ -48,8 +48,7 @@ interfaces and **awaiting credentials**. They are not claimed as live-verified.
 - [x] Notifications: in-app centre, quiet hours, daily cap, dedupe; browser push (permission requested only on click). **Push not live-verified (no VAPID keys).**
 
 ### Phase 4: Polish and deployment readiness ✅
-- [x] Accessibility: axe-core WCAG 2.1 A/AA scan of 12 pages × light/dark → 0 violations after fixes (last fix: notice text
-      opacity; rebuild and re-run `node scripts/a11y.mjs` to confirm); keyboard focus styles; skip link; reduced motion; text alternatives for charts (summaries + tables)
+- [x] Accessibility: axe-core WCAG 2.1 A/AA scan of 12 pages × light/dark → 0 violations (confirmed on the final production build); keyboard focus styles; skip link; reduced motion; text alternatives for charts (summaries + tables)
 - [x] Mobile: no horizontal overflow at 360 px on 28 pages (`scripts/check-overflow.mjs`); bottom nav; ≥44 px targets
 - [x] Light/dark themes (system or forced), validated chart palette (CVD-safe), token contrast ≥ 4.5:1
 - [x] PWA: manifest, icons, service worker (offline page; never caches financial data), push handler
@@ -67,6 +66,7 @@ interfaces and **awaiting credentials**. They are not claimed as live-verified.
 | `scripts/e2e-journey.mjs` (prod build) | ✅ sign up → onboarding (with skips) → income + expenses → budget + goal → over-budget insight scheduled → morning plan → finish task (+5 XP, undo/redo correct) → XP total 55 → weekly review (+40) → integrations honest state → export isolation |
 | `scripts/e2e-smoke.mjs` | ✅ 30+ pages × mobile/desktop + dark mode, no console/page errors; screenshots in `screenshots/` (git-ignored) |
 | `scripts/check-overflow.mjs` | ✅ none at 360 px |
+| `scripts/a11y.mjs` (axe, 12 pages × light/dark) | ✅ 0 violations |
 | Worker `npm run worker:once` | ✅ all 5 jobs ran and recorded in `job_run` |
 
 ## Known gaps / next steps (prioritised)
