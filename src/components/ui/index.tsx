@@ -145,7 +145,7 @@ export function Notice({ tone = "info", title, children, className }: { tone?: T
   return (
     <div className={cn("rounded-xl px-3 py-2.5 text-sm", tones[tone], className)} role="note">
       {title ? <p className="font-semibold">{title}</p> : null}
-      {children ? <div className={cn(title && "mt-0.5", "opacity-95")}>{children}</div> : null}
+      {children ? <div className={cn(title && "mt-0.5")}>{children}</div> : null}
     </div>
   );
 }

@@ -20,7 +20,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
   return (
     <div className="min-h-dvh">
       {user.isDemo ? (
-        <div className="sticky top-0 z-40 bg-accent px-4 py-1.5 text-center text-xs font-semibold text-white" role="status">
+        <div className="sticky top-0 z-40 border-b border-accent/30 bg-accent-soft px-4 py-1.5 text-center text-xs font-semibold text-accent" role="status">
           Demo mode · all figures are sample data ·{" "}
           <Link href="/settings/data" className="underline">
             start your own account
@@ -50,7 +50,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
             </Link>
             <div className="flex items-center gap-1">
               {xp ? (
-                <Link href="/progress" className="mr-1 inline-flex min-h-10 items-center gap-1.5 rounded-full bg-surface px-3 text-xs font-semibold shadow-[var(--shadow)]" aria-label={`Level ${xp.level}, ${xp.total} XP. View progress`}>
+                <Link href="/progress" className="mr-1 inline-flex min-h-10 items-center gap-1.5 rounded-full bg-surface px-3 text-xs font-semibold shadow-[var(--shadow)]" aria-label={`Lv ${xp.level}: level ${xp.level}, ${xp.total} XP, view progress`}>
                   <Trophy size={14} className="text-accent" aria-hidden /> Lv {xp.level}
                 </Link>
               ) : null}

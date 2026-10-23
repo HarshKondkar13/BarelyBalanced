@@ -17,12 +17,12 @@
   --border-strong: #c4c0b3;
   --text: #1b1e23;
   --text-muted: #5b6069;
-  --text-subtle: #747a84;
+  --text-subtle: #656b75;
   --primary: #0d6b63;
   --primary-hover: #0a5952;
   --primary-soft: #dcefeb;
   --primary-fg: #ffffff;
-  --accent: #a35a0b;
+  --accent: #96520a;
   --accent-soft: #fbecd6;
   --positive: #1f7a3d;
   --positive-soft: #dff1e4;
@@ -213,3 +213,9 @@ dialog::backdrop {
 
 /* Safe-area padding for installed PWA on notched phones */
 .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+
+/* Grid items default to min-width:auto, which lets long content widen the page on
+   phones. Let them shrink so truncation and wrapping work. */
+.grid > * {
+  min-width: 0;
+}

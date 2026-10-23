@@ -112,7 +112,7 @@ export function ScenarioLab({ defaultMonthly, defaultInitial, risk }: { defaultM
           {results ? (
             <>
               <ScenarioChart data={chart} />
-              <div className="mt-4 overflow-x-auto">
+              <div className="mt-4 overflow-x-auto" tabIndex={0} role="region" aria-label="Scenario results table">
                 <table className="num w-full min-w-[480px] text-left text-sm">
                   <thead className="text-xs text-muted"><tr><th className="py-1 font-medium">Scenario</th><th className="font-medium">Assumed return</th><th className="font-medium">Final value</th><th className="font-medium">Fees paid</th><th className="font-medium">Tax (illustr.)</th><th className="font-medium">After tax, today&apos;s ₹</th></tr></thead>
                   <tbody>

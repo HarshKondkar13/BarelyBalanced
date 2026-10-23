@@ -6,6 +6,8 @@ import { createTransaction, deleteTransaction, loadTransactions, OwnershipError,
 import { awardXp, revokeXp, xpSummary } from "@/server/xp";
 import { runOnce } from "@/server/jobs/run";
 import { pool } from "@/db";
+import { notifications, recurringItems } from "@/db/schema";
+import { hourlyUserTick } from "@/server/jobs/tasks";
 
 async function account(userId: string, name = "Bank") {
   const [a] = await db.insert(finAccounts).values({ userId, name, type: "bank", openingBalance: 0, openingDate: "2026-01-01" }).returning();
@@ -111,5 +113,28 @@ describe("background job runner", () => {
     expect(row.attempts).toBe(2);
     expect((await runOnce(db, "test-job", "slot-1", flaky)).skipped).toBe(true);
     expect(calls).toBe(2);
+  });
+});
+
+describe("reminder job", () => {
+  it("creates one bill reminder per due date, idempotently, in the user's timezone", async () => {
+    const u = await makeUser("remind");
+    created.push(u);
+    await db.insert(recurringItems).values({ userId: u, name: "Rent", direction: "outflow", kind: "bill", amount: 20_000_00, frequency: "monthly", nextDueDate: "2026-10-25", remindDaysBefore: 2 });
+    const tenAmIst = new Date("2026-10-24T04:30:00Z");
+    await hourlyUserTick(db, tenAmIst);
+    await hourlyUserTick(db, tenAmIst); // job redelivered / ran twice
+    const rows = await db.select().from(notifications).where(eq(notifications.userId, u));
+    expect(rows).toHaveLength(1);
+    expect(rows[0].title).toBe("Rent due tomorrow");
+    expect(rows[0].body).not.toMatch(/undefined/);
+  });
+
+  it("does not remind before 8am local time", async () => {
+    const u = await makeUser("early");
+    created.push(u);
+    await db.insert(recurringItems).values({ userId: u, name: "Netflix", direction: "outflow", kind: "subscription", amount: 649_00, frequency: "monthly", nextDueDate: "2026-10-24", remindDaysBefore: 1 });
+    await hourlyUserTick(db, new Date("2026-10-23T21:30:00Z")); // 03:00 IST
+    expect(await db.select().from(notifications).where(eq(notifications.userId, u))).toHaveLength(0);
   });
 });
