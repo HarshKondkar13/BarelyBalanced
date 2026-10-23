@@ -1,9 +1,12 @@
 import type { NextConfig } from "next";
 
+/**
+ * Cache Components is intentionally off: almost every screen is per-user financial
+ * data that must never be served stale, so all routes render dynamically per request.
+ */
 const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+  poweredByHeader: false,
+  serverExternalPackages: ["pg", "pg-boss"],
   turbopack: {
     rules: {
       "*.css": {
@@ -11,6 +14,19 @@ const nextConfig: NextConfig = {
         as: "*.css",
       },
     },
+  },
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+        ],
+      },
+    ];
   },
 };
 
