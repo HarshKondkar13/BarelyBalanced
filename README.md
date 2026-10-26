@@ -15,25 +15,44 @@ Recharts · Zod · pg-boss (jobs) · Vitest + Playwright · optional Anthropic S
 
 ## Run locally
 
-Requirements: Node 22+, PostgreSQL 16 (or Docker).
+Requirements: Node 22+, Git, and PostgreSQL 16 (installed directly, or via Docker).
+
+### Windows (no Docker needed)
+
+1. Install PostgreSQL 16 from https://www.postgresql.org/download/windows/ (the EDB installer). Keep port **5432**,
+   remember the password you set for the `postgres` user, and skip Stack Builder at the end.
+2. In PowerShell:
+   ```powershell
+   git clone https://github.com/HarshKondkar13/BarelyBalanced.git
+   cd BarelyBalanced
+   npm install
+   npm run setup -- --admin-url=postgres://postgres:YOUR_POSTGRES_PASSWORD@localhost:5432/postgres
+   npm run db:migrate
+   npm run dev
+   ```
+3. Open http://localhost:3000 and choose **Explore with sample data**, or create an account.
+
+`npm run setup` creates `.env` with fresh secrets, creates the `paisa` database user plus the `paisa_dev` and `paisa_test`
+databases, and checks the connection. It is safe to run again.
+
+### macOS / Linux (or Windows with Docker Desktop)
 
 ```bash
 npm install
-docker compose up -d                 # or use your own Postgres; creates paisa_dev and paisa_test
-cp .env.example .env                 # then fill BETTER_AUTH_SECRET and INTEGRATION_ENCRYPTION_KEY:
-openssl rand -base64 32              #   run twice, paste one value into each
-npm run db:migrate                   # create tables in paisa_dev
-npm run db:migrate:test              # create tables in paisa_test (for tests)
-npm run dev                          # http://localhost:3000, then "Explore with sample data" or create an account
-npm run worker                       # in a second terminal: background jobs (reminders, news, calendar sync)
+docker compose up -d                 # Postgres with paisa_dev and paisa_test
+npm run setup                        # creates .env with fresh secrets and checks the database
+npm run db:migrate
+npm run dev                          # http://localhost:3000
 ```
+
+Optional, in a second terminal: `npm run worker` runs background jobs (reminders, news, calendar sync).
 
 ### Checks
 
 ```bash
 npm run typecheck      # route types + tsc
 npm run lint
-npm test               # unit + database integration tests (uses paisa_test)
+npm run db:migrate:test && npm test   # unit + database integration tests (uses paisa_test)
 npm run build && npm start
 npm run e2e            # with the app running: browser smoke test of every page (screenshots/)
 node scripts/e2e-journey.mjs     # full sign-up → money → budget → insight → plan → XP → weekly review journey
