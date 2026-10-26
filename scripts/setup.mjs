@@ -7,6 +7,30 @@ import { randomBytes } from "node:crypto";
 import pg from "pg";
 
 const secret = () => randomBytes(32).toString("base64");
+
+/**
+ * Plain-English reason for a failed connection. On Windows "localhost" resolves to both IPv6
+ * and IPv4, so a refused connection arrives as an AggregateError with an EMPTY message;
+ * the useful code is on the error or its inner errors.
+ */
+function explain(e, url) {
+  const code = e?.code ?? e?.errors?.[0]?.code;
+  const where = (() => { try { const u = new URL(url); return `${u.hostname}:${u.port || 5432}`; } catch { return "the database"; } })();
+  switch (code) {
+    case "ECONNREFUSED":
+      return `nothing is accepting connections on ${where}. PostgreSQL isn't running, or it uses a different port.\n    Windows: press Win+R, type services.msc, find "postgresql-x64-<version>", and click Start.\n    If it's running, check its port in the installer summary or postgresql.conf, and use that port in the URL.`;
+    case "28P01":
+      return "wrong password. Use the password you chose for the postgres user during installation (special characters must be URL-encoded, e.g. ? as %3F).";
+    case "3D000":
+      return `the database in ${url.replace(/:[^:@/]*@/, ":***@")} doesn't exist.`;
+    case "ENOTFOUND":
+      return `the host in the URL (${where}) couldn't be found. Use localhost.`;
+    case "ETIMEDOUT":
+      return `connecting to ${where} timed out. Is a firewall blocking it?`;
+    default:
+      return e?.message || e?.errors?.[0]?.message || String(code ?? e);
+  }
+}
 const ok = (m) => console.log(`  ✓ ${m}`);
 const fail = (m) => { console.error(`  ✗ ${m}`); process.exit(1); };
 
@@ -31,7 +55,7 @@ if (adminArg) {
   try {
     await admin.connect();
   } catch (e) {
-    fail(`could not connect with the admin URL (${e.message}). Check the postgres password you chose during installation.`);
+    fail(`could not connect with the admin URL: ${explain(e, adminArg.slice("--admin-url=".length))}`);
   }
   const target = new URL(dbUrl);
   const role = decodeURIComponent(target.username);
@@ -66,7 +90,11 @@ try {
   if (rows[0].ready) ok("tables exist (migrations have been run)");
   else console.log("  ! tables not created yet. Run: npm run db:migrate");
 } catch (e) {
-  fail(`can't reach the database at ${new URL(dbUrl).host} (${e.message}).\n    Is PostgreSQL running? If this is a fresh install, run:\n    npm run setup -- --admin-url=postgres://postgres:YOUR_PASSWORD@localhost:5432/postgres`);
+  const reason = explain(e, dbUrl);
+  const hint = ["28P01", "3D000"].includes(e?.code ?? e?.errors?.[0]?.code)
+    ? "\n    If this is a fresh install, run: npm run setup -- --admin-url=postgres://postgres:YOUR_PASSWORD@localhost:5432/postgres"
+    : "";
+  fail(`can't connect to the app database: ${reason}${hint}`);
 }
 
 console.log("\nNext: npm run db:migrate   then   npm run dev   and open http://localhost:3000\n");
