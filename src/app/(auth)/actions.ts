@@ -10,6 +10,15 @@ import { db } from "@/db";
 import { user } from "@/db/schema";
 import { ensureUserInitialized } from "@/server/setup";
 import { seedDemoData } from "@/server/demo-seed";
+import { classifyDbError, DB_PROBLEM_HELP } from "@/server/db-errors";
+import { log } from "@/server/log";
+
+/** Database setup problems get a specific fix instead of a generic crash. */
+function dbProblem(e: unknown) {
+  const problem = classifyDbError(e);
+  if (problem) log.error("db.unavailable", { problem });
+  return problem;
+}
 
 export type AuthState = { error?: string } | undefined;
 
@@ -26,6 +35,8 @@ export async function signUpAction(_: AuthState, form: FormData): Promise<AuthSt
     const res = await auth.api.signUpEmail({ body: parsed.data, headers: await headers() });
     await ensureUserInitialized(db, res.user.id);
   } catch (e) {
+    const problem = dbProblem(e);
+    if (problem) return { error: DB_PROBLEM_HELP[problem] };
     if (e instanceof APIError) return { error: e.message || "Could not create the account" };
     throw e;
   }
@@ -40,6 +51,8 @@ export async function signInAction(_: AuthState, form: FormData): Promise<AuthSt
   try {
     await auth.api.signInEmail({ body: parsed.data, headers: await headers() });
   } catch (e) {
+    const problem = dbProblem(e);
+    if (problem) return { error: DB_PROBLEM_HELP[problem] };
     if (e instanceof APIError) return { error: "Email or password is incorrect" };
     throw e;
   }
@@ -52,14 +65,20 @@ export async function signInAction(_: AuthState, form: FormData): Promise<AuthSt
  */
 export async function startDemoAction(): Promise<void> {
   if (process.env.DEMO_MODE_ENABLED !== "true") redirect("/sign-in");
-  const id = crypto.randomUUID();
-  const res = await auth.api.signUpEmail({
-    body: { name: "Demo explorer", email: `demo-${id}@demo.invalid`, password: crypto.randomUUID() + crypto.randomUUID() },
-    headers: await headers(),
-  });
-  await db.update(user).set({ isDemo: true }).where(eq(user.id, res.user.id));
-  await ensureUserInitialized(db, res.user.id);
-  await seedDemoData(db, res.user.id);
+  try {
+    const id = crypto.randomUUID();
+    const res = await auth.api.signUpEmail({
+      body: { name: "Demo explorer", email: `demo-${id}@demo.invalid`, password: crypto.randomUUID() + crypto.randomUUID() },
+      headers: await headers(),
+    });
+    await db.update(user).set({ isDemo: true }).where(eq(user.id, res.user.id));
+    await ensureUserInitialized(db, res.user.id);
+    await seedDemoData(db, res.user.id);
+  } catch (e) {
+    const problem = dbProblem(e);
+    if (problem) redirect(`/sign-in?db=${problem}`);
+    throw e;
+  }
   redirect("/today");
 }
 

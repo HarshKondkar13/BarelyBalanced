@@ -60,8 +60,11 @@ const client = new pg.Client({ connectionString: dbUrl });
 try {
   await client.connect();
   await client.query("select 1");
-  await client.end();
   ok(`connected to ${new URL(dbUrl).pathname.slice(1)} on ${new URL(dbUrl).host}`);
+  const { rows } = await client.query(`select to_regclass('public."user"') is not null as ready`);
+  await client.end();
+  if (rows[0].ready) ok("tables exist (migrations have been run)");
+  else console.log("  ! tables not created yet. Run: npm run db:migrate");
 } catch (e) {
   fail(`can't reach the database at ${new URL(dbUrl).host} (${e.message}).\n    Is PostgreSQL running? If this is a fresh install, run:\n    npm run setup -- --admin-url=postgres://postgres:YOUR_PASSWORD@localhost:5432/postgres`);
 }
