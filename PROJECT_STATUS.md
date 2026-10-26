@@ -78,11 +78,9 @@ interfaces and **awaiting credentials**. They are not claimed as live-verified.
    rows); move balances and monthly sums to SQL aggregates if it grows.
 5. Task-level "publish to calendar" toggle lives on Settings → Integrations; consider adding it to the task menu.
 6. Followed companies only highlight titles; a per-entity feed filter could follow.
-7. Repo has no remote yet; push to GitHub so work survives this cloud container.
 
 ## Blockers / decisions needed from the owner
 
-- **GitHub remote**: this code lives in an ephemeral cloud container with only a local git repo. Provide a repository to push to.
 - Google OAuth client (ID/secret) + test user, if you want Calendar and Google sign-in.
 - Licensed / permitted RSS feed URLs per topic (check each publisher's terms).
 - `ANTHROPIC_API_KEY` if you want AI explainers (costs money per call; off by default).
@@ -90,6 +88,8 @@ interfaces and **awaiting credentials**. They are not claimed as live-verified.
 - Hosting choice for an always-on worker (required for reminders and ingestion).
 
 ## Session log
+
+- 2026-10-26: Pushed `main` to https://github.com/HarshKondkar13/BarelyBalanced.
 
 - 2026-10-23/24: Scaffolded Next.js 16 app; implemented Phases 1–4; verified as above. Sandbox network blocked most external docs
   sites, so APIs were checked against installed package type definitions (Next 16 bundled docs, Better Auth, pg-boss, Anthropic SDK);
