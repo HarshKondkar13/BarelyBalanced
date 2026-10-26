@@ -25,7 +25,7 @@ Requirements: Node 22+, Git, and PostgreSQL 16 (installed directly, or via Docke
    ```powershell
    git clone https://github.com/HarshKondkar13/BarelyBalanced.git
    cd BarelyBalanced
-   npm install
+   npm ci
    npm run setup -- --admin-url=postgres://postgres:YOUR_POSTGRES_PASSWORD@localhost:5432/postgres
    npm run db:migrate
    npm run dev
@@ -38,7 +38,7 @@ databases, and checks the connection. It is safe to run again.
 ### macOS / Linux (or Windows with Docker Desktop)
 
 ```bash
-npm install
+npm ci                               # installs exactly what package-lock.json lists (doesn't modify it)
 docker compose up -d                 # Postgres with paisa_dev and paisa_test
 npm run setup                        # creates .env with fresh secrets and checks the database
 npm run db:migrate
