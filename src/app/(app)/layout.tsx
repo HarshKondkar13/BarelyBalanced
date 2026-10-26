@@ -30,7 +30,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
       <div className="mx-auto flex max-w-6xl gap-8 md:px-6">
         <aside className="sticky top-0 hidden h-dvh w-56 shrink-0 flex-col py-6 md:flex">
           <Link href="/today" className="mb-8 flex items-center gap-2 px-3 font-semibold">
-            <Logo /> <span className="truncate">{brand.name}</span>
+            <Logo /> <span className="glow-text truncate">{brand.name}</span>
           </Link>
           <SideNav />
           <div className="mt-auto space-y-1 text-sm">
@@ -46,7 +46,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
           <header className="flex items-center justify-between px-4 pb-1 pt-4 md:px-0">
             <Link href="/today" className="flex items-center gap-2 font-semibold md:invisible" aria-label={`${brand.name} home`}>
               <Logo size={26} />
-              <span className="text-[15px]">{brand.shortName}</span>
+              <span className="glow-text text-[15px]">{brand.shortName}</span>
             </Link>
             <div className="flex items-center gap-1">
               {xp ? (

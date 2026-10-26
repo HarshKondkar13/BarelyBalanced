@@ -22,7 +22,7 @@ Browser (PWA) ──► Next.js server ──► PostgreSQL
 | Background jobs | `src/worker/index.ts`, `src/server/jobs/*` | pg-boss schedules + `runOnce` idempotency ledger (`job_run`). |
 | Data access + authorization | `src/server/*.ts` | Every query filters by `userId`; referenced ids are ownership-checked. |
 | Mutations | `src/app/(app)/_actions/*.ts` | Server actions; zod-validated; call `getContext()` (verified session) first. |
-| UI | `src/app/**`, `src/components/**` | Tailwind v4 tokens in `globals.css`; Recharts for charts. |
+| UI | `src/app/**`, `src/components/**` | Tailwind v4 tokens in `globals.css` (themes: `data-theme="neon"` default, `light`, `dark`, or none = follow device; chosen via the `pp_theme` cookie set from Settings); Recharts for charts. |
 | User data & preferences | `preferences`, `financial_profile` tables | Timezone, theme, gamification mode, AI data use, notification prefs. |
 
 ## Data model (main tables)

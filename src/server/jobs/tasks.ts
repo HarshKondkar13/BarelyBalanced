@@ -24,7 +24,7 @@ export async function ingestNews(db: DB, fetchImpl: typeof fetch = fetch) {
     const all: Array<{ topic: string; source: string; title: string; url: string; publishedAt: Date; summary: string | null }> = [];
     for (const f of feeds) {
       try {
-        const res = await fetchImpl(f.url, { headers: { "User-Agent": "PaisaPurpose/1.0 (personal news reader)", Accept: "application/rss+xml, application/atom+xml, application/xml;q=0.9" }, signal: AbortSignal.timeout(15_000) });
+        const res = await fetchImpl(f.url, { headers: { "User-Agent": "BarelyBalanced/1.0 (personal news reader)", Accept: "application/rss+xml, application/atom+xml, application/xml;q=0.9" }, signal: AbortSignal.timeout(15_000) });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const items = parseFeed((await res.text()).slice(0, 3_000_000));
         fetched += items.length;

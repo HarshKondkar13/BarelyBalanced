@@ -3,12 +3,13 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 import { db } from "@/db";
+import { brand } from "@/lib/brand";
 import * as schema from "@/db/schema";
 
 const googleConfigured = Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
 
 export const auth = betterAuth({
-  appName: process.env.NEXT_PUBLIC_APP_NAME ?? "Paisa & Purpose",
+  appName: brand.name,
   baseURL: process.env.BETTER_AUTH_URL,
   secret: process.env.BETTER_AUTH_SECRET,
   database: drizzleAdapter(db, {

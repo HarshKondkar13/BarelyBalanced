@@ -23,7 +23,7 @@ const TZ_OK = (tz: string) => {
 const prefSchema = z.object({
   displayName: z.string().trim().max(60).optional(),
   timezone: z.string().refine(TZ_OK, "Unknown timezone").optional(),
-  theme: z.enum(["system", "light", "dark"]).optional(),
+  theme: z.enum(["neon", "system", "light", "dark"]).optional(),
   weekStartsOn: z.coerce.number().int().min(0).max(1).optional(),
   restDaysPerWeek: z.coerce.number().int().min(0).max(3).optional(),
   aiDataUse: z.enum(["off", "aggregates", "explanations"]).optional(),
@@ -42,7 +42,7 @@ export async function savePreferencesAction(_: ActionResult | undefined, form: F
   await db.update(preferences).set(parsed.data).where(eq(preferences.userId, user.id));
   if (parsed.data.theme) {
     const jar = await cookies();
-    if (parsed.data.theme === "system") jar.delete("pp_theme");
+    if (parsed.data.theme === "neon") jar.delete("pp_theme");
     else jar.set("pp_theme", parsed.data.theme, { path: "/", maxAge: 31536000, sameSite: "lax" });
   }
   refresh();

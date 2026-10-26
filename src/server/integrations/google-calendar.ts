@@ -6,6 +6,7 @@ import { decryptSecret, encryptSecret } from "@/lib/integrations/crypto";
 import { contentHash, parseGoogleEvent, planPublish, SCOPES, type EventBody, type GoogleEvent, type PublishPlan, type PublishableTask } from "@/lib/integrations/calendar";
 import { addDays, localDateTimeToInstant, type LocalDate } from "@/lib/dates";
 import { log } from "@/server/log";
+import { brand } from "@/lib/brand";
 
 /*
  * Google Calendar integration over the official REST API (v3) and OAuth 2.0 endpoints.
@@ -18,7 +19,7 @@ const AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 const TOKEN_URL = "https://oauth2.googleapis.com/token";
 const REVOKE_URL = "https://oauth2.googleapis.com/revoke";
 const API = "https://www.googleapis.com/calendar/v3";
-export const APP_CALENDAR_NAME = `${process.env.NEXT_PUBLIC_APP_NAME || "Paisa & Purpose"} – time blocks`;
+export const APP_CALENDAR_NAME = `${brand.name} – time blocks`;
 
 export const googleConfigured = () => Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET && process.env.BETTER_AUTH_URL);
 export const redirectUri = () => `${process.env.BETTER_AUTH_URL}/api/integrations/google/callback`;

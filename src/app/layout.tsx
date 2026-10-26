@@ -17,20 +17,19 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f6f5f1" },
-    { media: "(prefers-color-scheme: dark)", color: "#111317" },
-  ],
+  themeColor: "#07080f",
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const jar = await cookies();
-  const theme = jar.get("pp_theme")?.value;
+  // Neon Night unless the user chose a Classic theme ("system" follows the device).
+  const saved = jar.get("pp_theme")?.value;
+  const theme = saved === "light" || saved === "dark" || saved === "system" ? saved : "neon";
   const accent = jar.get("pp_accent")?.value;
   return (
     <html
       lang="en-IN"
-      data-theme={theme === "light" || theme === "dark" ? theme : undefined}
+      data-theme={theme === "system" ? undefined : theme}
       data-accent={accent && /^[a-z]+$/.test(accent) ? accent : undefined}
       className="h-full antialiased"
     >

@@ -1,6 +1,6 @@
 /* Service worker: offline fallback for navigations and web push display.
    Financial data is never cached; only the offline page and static assets are. */
-const CACHE = "pp-static-v1";
+const CACHE = "bb-static-v2";
 const OFFLINE_URL = "/offline.html";
 
 self.addEventListener("install", (event) => {

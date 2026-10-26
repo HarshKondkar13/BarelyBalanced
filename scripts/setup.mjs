@@ -10,7 +10,7 @@ const secret = () => randomBytes(32).toString("base64");
 const ok = (m) => console.log(`  ✓ ${m}`);
 const fail = (m) => { console.error(`  ✗ ${m}`); process.exit(1); };
 
-console.log("\nSetting up Paisa & Purpose\n");
+console.log("\nSetting up Barely Balanced\n");
 
 // 1. .env with generated secrets
 if (existsSync(".env")) ok(".env already exists (left unchanged)");

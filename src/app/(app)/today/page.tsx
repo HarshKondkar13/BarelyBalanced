@@ -83,11 +83,11 @@ export default async function TodayPage({ searchParams }: PageProps<"/today">) {
       {flow === "evening" ? <EveningReview unfinished={tasksToday.filter((t) => t.status === "todo")} loggedToday={progress.snapshot.loggedToday} /> : null}
 
       {!flow ? (
-        <section aria-labelledby="nba-title" className="rounded-[var(--radius)] bg-primary p-4 text-primary-fg shadow-[var(--shadow)]">
+        <section aria-labelledby="nba-title" className="hero-card rounded-[var(--radius)] p-4">
           <p className="text-xs font-semibold uppercase tracking-wide opacity-80">Next best action</p>
           <h2 id="nba-title" className="mt-1 text-lg font-bold leading-snug">{nba.title}</h2>
           <p className="mt-1 text-sm opacity-90"><span className="font-semibold">Why: </span>{nba.why}</p>
-          <Link href={nba.href} className="mt-3 inline-flex min-h-11 items-center gap-1.5 rounded-xl bg-primary-fg px-4 text-sm font-semibold text-primary">
+          <Link href={nba.href} className="hero-cta mt-3 inline-flex min-h-11 items-center gap-1.5 rounded-xl px-4 text-sm font-semibold">
             {nba.cta} <ArrowRight size={16} aria-hidden />
           </Link>
         </section>

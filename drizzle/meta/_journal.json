@@ -15,6 +15,13 @@
       "when": 1792789095186,
       "tag": "0001_calendar_pub_no_fk",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793011991584,
+      "tag": "0002_neon_default_theme",
+      "breakpoints": true
     }
   ]
 }

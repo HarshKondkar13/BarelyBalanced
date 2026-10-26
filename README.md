@@ -1,4 +1,4 @@
-# Paisa & Purpose
+# Barely Balanced
 
 > Understand your money, make informed decisions, and follow through every day.
 

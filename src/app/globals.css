@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
-/* Theme switching: system by default, or forced via <html data-theme="light|dark">. */
+/*
+ * Themes: <html data-theme="neon"> (Neon Night, the default), "light" / "dark" (Classic),
+ * or no attribute (Classic, following the device's light/dark setting).
+ */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /*
@@ -42,6 +45,16 @@
   --chart-grid: #e4e1d8;
   --shadow: 0 1px 2px rgb(20 20 20 / 0.04), 0 2px 8px rgb(20 20 20 / 0.04);
   --radius: 14px;
+  /* Hero (next best action) card and decorative layers; Neon Night overrides these. */
+  --hero-bg: var(--primary);
+  --hero-fg: var(--primary-fg);
+  --hero-border: transparent;
+  --hero-cta-bg: var(--primary-fg);
+  --hero-cta-fg: var(--primary);
+  --glow: none;
+  --glow-text: none;
+  --bg-image: none;
+  --font-num: inherit;
   color-scheme: light;
 }
 
@@ -118,9 +131,64 @@
 }
 
 /* Cosmetic accent unlocks override the primary hue only. */
-:root[data-accent="indigo"] { --primary: #3f51b5; --primary-hover: #34449a; --primary-soft: #e3e6f7; }
-:root[data-accent="saffron"] { --primary: #b25b00; --primary-hover: #964d00; --primary-soft: #fbe9d4; }
-:root[data-accent="rose"] { --primary: #b23a5b; --primary-hover: #97304c; --primary-soft: #f8e1e8; }
+/*
+ * Neon Night. Calm off-white text on near-black; neon is reserved for accents, charts and
+ * highlights. Every text/background pair below is >= 4.5:1; the chart slots pass the CVD
+ * validator on --surface. Status colours keep icons and labels (never colour alone).
+ */
+:root[data-theme="neon"] {
+  --bg: #07080f;
+  --surface: #0e1120;
+  --surface-2: #151a2e;
+  --surface-3: #1d2440;
+  --border: #232b4a;
+  --border-strong: #36426e;
+  --text: #e8ecff;
+  --text-muted: #a9b1d6;
+  --text-subtle: #8b94c0;
+  --primary: #22d3ee;
+  --primary-hover: #67e8f9;
+  --primary-soft: #0a2833;
+  --primary-fg: #041016;
+  --accent: #ff4fd8;
+  --accent-soft: #33102c;
+  --positive: #4ade80;
+  --positive-soft: #0b2618;
+  --attention: #facc15;
+  --attention-soft: #2b2307;
+  --danger: #ff7a59;
+  --danger-soft: #33150d;
+  --info: #a78bfa;
+  --info-soft: #1b1640;
+  --focus: #facc15;
+  --chart-1: #1e90e8;
+  --chart-2: #e8622a;
+  --chart-3: #16a36f;
+  --chart-4: #d24fae;
+  --chart-5: #c98500;
+  --chart-grid: #1c2340;
+  --shadow: 0 0 0 1px rgb(34 211 238 / 0.06), 0 8px 24px rgb(0 0 0 / 0.45);
+  --hero-bg: linear-gradient(135deg, #0a2833 0%, #12152b 55%, #2a0c2a 100%);
+  --hero-fg: #e8ecff;
+  --hero-border: rgb(34 211 238 / 0.45);
+  --hero-cta-bg: #22d3ee;
+  --hero-cta-fg: #041016;
+  --glow: 0 0 0 1px rgb(34 211 238 / 0.35), 0 0 18px rgb(34 211 238 / 0.28);
+  --glow-text: 0 0 12px rgb(34 211 238 / 0.45);
+  --bg-image:
+    radial-gradient(900px 500px at 0% -10%, rgb(34 211 238 / 0.10), transparent 60%),
+    radial-gradient(700px 500px at 110% 110%, rgb(255 79 216 / 0.09), transparent 60%);
+  --font-num: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
+  --logo-bg: #0a1220;
+  --logo-ring: #22d3ee;
+  --logo-fg: #22d3ee;
+  --logo-accent: #ff4fd8;
+  color-scheme: dark;
+}
+
+:root:not([data-theme="neon"])[data-accent="indigo"] { --primary: #3f51b5; --primary-hover: #34449a; --primary-soft: #e3e6f7; }
+:root:not([data-theme="neon"])[data-accent="saffron"] { --primary: #b25b00; --primary-hover: #964d00; --primary-soft: #fbe9d4; }
+:root:not([data-theme="neon"])[data-accent="rose"] { --primary: #b23a5b; --primary-hover: #97304c; --primary-soft: #f8e1e8; }
 
 @theme inline {
   --color-bg: var(--bg);
@@ -157,7 +225,9 @@ html {
 }
 
 body {
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image: var(--bg-image);
+  background-attachment: fixed;
   color: var(--text);
   font-family: var(--font-sans);
   font-feature-settings: "tnum" 0;
@@ -166,6 +236,25 @@ body {
 /* Tabular numbers for all money so columns align. */
 .num {
   font-variant-numeric: tabular-nums;
+  font-family: var(--font-num);
+}
+
+/* Neon accents (no-ops in Classic themes, where the tokens are "none"). */
+.glow {
+  box-shadow: var(--glow);
+}
+.glow-text {
+  text-shadow: var(--glow-text);
+}
+.hero-card {
+  background: var(--hero-bg);
+  color: var(--hero-fg);
+  border: 1px solid var(--hero-border);
+  box-shadow: var(--glow), var(--shadow);
+}
+.hero-cta {
+  background: var(--hero-cta-bg);
+  color: var(--hero-cta-fg);
 }
 
 :focus-visible {
@@ -209,6 +298,9 @@ dialog::backdrop {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+  /* Calmer visuals for people who ask for less motion and effect. */
+  .glow, .hero-card { box-shadow: var(--shadow) !important; }
+  .glow-text { text-shadow: none !important; }
 }
 
 /* Safe-area padding for installed PWA on notched phones */

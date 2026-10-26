@@ -25,7 +25,7 @@ export default async function SettingsPage() {
             <Field label="Time zone" htmlFor="tz" hint="Used for 'today', reminders and calendar times."><Input id="tz" name="timezone" defaultValue={prefs?.timezone ?? "Asia/Kolkata"} /></Field>
             <div className="grid grid-cols-2 gap-3">
               <Field label="Theme" htmlFor="th">
-                <Select id="th" name="theme" defaultValue={prefs?.theme ?? "system"}><option value="system">Match device</option><option value="light">Light</option><option value="dark">Dark</option></Select>
+                <Select id="th" name="theme" defaultValue={prefs?.theme ?? "neon"}><option value="neon">Neon Night</option><option value="system">Classic (match device)</option><option value="light">Classic light</option><option value="dark">Classic dark</option></Select>
               </Field>
               <Field label="Week starts" htmlFor="ws">
                 <Select id="ws" name="weekStartsOn" defaultValue={String(prefs?.weekStartsOn ?? 1)}><option value="1">Monday</option><option value="0">Sunday</option></Select>

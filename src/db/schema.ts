@@ -113,7 +113,7 @@ export const preferences = pgTable("preferences", {
   timezone: text("timezone").notNull().default("Asia/Kolkata"),
   currency: text("currency").notNull().default("INR"),
   locale: text("locale").notNull().default("en-IN"),
-  theme: text("theme", { enum: ["system", "light", "dark"] }).notNull().default("system"),
+  theme: text("theme", { enum: ["neon", "system", "light", "dark"] }).notNull().default("neon"),
   gamification: text("gamification", { enum: ["full", "reduced", "off"] })
     .notNull()
     .default("full"),

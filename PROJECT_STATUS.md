@@ -1,4 +1,4 @@
-# Project status: Paisa & Purpose
+# Project status: Barely Balanced
 
 _Last updated: 2026-10-24 (IST) by Claude Code. Keep this file current at the end of every session._
 
@@ -50,7 +50,7 @@ interfaces and **awaiting credentials**. They are not claimed as live-verified.
 ### Phase 4: Polish and deployment readiness ✅
 - [x] Accessibility: axe-core WCAG 2.1 A/AA scan of 12 pages × light/dark → 0 violations (confirmed on the final production build); keyboard focus styles; skip link; reduced motion; text alternatives for charts (summaries + tables)
 - [x] Mobile: no horizontal overflow at 360 px on 28 pages (`scripts/check-overflow.mjs`); bottom nav; ≥44 px targets
-- [x] Light/dark themes (system or forced), validated chart palette (CVD-safe), token contrast ≥ 4.5:1
+- [x] Themes: Neon Night (default, cyberpunk) plus Classic light/dark/match-device; validated chart palettes (CVD-safe); token contrast ≥ 4.5:1
 - [x] PWA: manifest, icons, service worker (offline page; never caches financial data), push handler
 - [x] Data controls: export (CSV/JSON), delete account (revokes integrations first), demo discard
 - [x] Docs: README (setup, env, Google/news setup, hosting requirements), `docs/ARCHITECTURE.md`, this file
@@ -88,6 +88,8 @@ interfaces and **awaiting credentials**. They are not claimed as live-verified.
 - Hosting choice for an always-on worker (required for reminders and ingestion).
 
 ## Session log
+
+- 2026-10-26: Renamed to **Barely Balanced**; added **Neon Night** cyberpunk theme as the default (Classic light/dark/match-device remain in Settings → Theme); neon icons; CVD-validated neon chart palette; axe 0 violations, no overflow, journey passes. Added `npm run setup` (cross-platform) and friendly database-setup errors.
 
 - 2026-10-26: Pushed `main` to https://github.com/HarshKondkar13/BarelyBalanced.
 

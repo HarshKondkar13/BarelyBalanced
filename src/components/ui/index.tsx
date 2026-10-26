@@ -7,7 +7,7 @@ import { formatINR, formatINRCompact } from "@/lib/money";
 
 type Variant = "primary" | "secondary" | "ghost" | "danger" | "soft";
 const variants: Record<Variant, string> = {
-  primary: "bg-primary text-primary-fg hover:bg-primary-hover",
+  primary: "glow bg-primary text-primary-fg hover:bg-primary-hover",
   secondary: "bg-surface text-text border border-border-strong hover:bg-surface-2",
   ghost: "text-text hover:bg-surface-2",
   danger: "bg-danger text-white hover:opacity-90",
@@ -115,7 +115,7 @@ export function Progress({ value, tone = "primary", label, className }: { value:
   const color = { primary: "bg-primary", positive: "bg-positive", attention: "bg-attention", danger: "bg-danger" }[tone];
   return (
     <div className={cn("h-2 w-full overflow-hidden rounded-full bg-surface-3", className)} role="progressbar" aria-label={label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(pct * 100)}>
-      <div className={cn("h-full rounded-full transition-[width] duration-500", color)} style={{ width: `${pct * 100}%` }} />
+      <div className={cn("h-full rounded-full transition-[width] duration-500", tone === "primary" && "glow", color)} style={{ width: `${pct * 100}%` }} />
     </div>
   );
 }

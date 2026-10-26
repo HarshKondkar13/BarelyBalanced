@@ -59,5 +59,5 @@ export async function GET(req: NextRequest) {
     user: { name: user.name, email: user.email, isDemo: user.isDemo },
     preferences: prefs, financialProfile: profile, accounts, categories: cats, transactions: txns, budgets, recurringItems: recurring, goals, goalContributions: contributions, holdings, tasks, routines, habits, habitLogs, dailyReviews, weeklyReviews, xpEvents: xp, newsBookmarks: bookmarks,
   };
-  return new NextResponse(JSON.stringify(body, null, 2), { headers: { "Content-Type": "application/json", "Content-Disposition": `attachment; filename="paisa-export-${stamp}.json"`, "Cache-Control": "no-store" } });
+  return new NextResponse(JSON.stringify(body, null, 2), { headers: { "Content-Type": "application/json", "Content-Disposition": `attachment; filename="barely-balanced-export-${stamp}.json"`, "Cache-Control": "no-store" } });
 }
